@@ -1,0 +1,1 @@
+import hello_word from "./module/test.js"
