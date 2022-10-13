@@ -1,18 +1,16 @@
 var animationSpeed = 750;
-var library = [];
+var library = [{"TEST" : "TEST"}];
 
 $(document).ready(function(){
-    fillLibrary();
-    attachAnimations();    
+    assembleData();
 });
 
 /* -----------------------------------------------------------------------------
     FILL PAGE HTML 
    ---------------------------------------------------------------------------*/
-function fillLibrary() {
-    assembleData();
-    console.log(library)
-    // console.log(library[0].length)
+function fillLibrary(param) {
+    var library = []
+    library.push(param)
     var classlist = ['left-side first','left-side','left-side','right-side','right-side','right-side last'];
         for (i=0; i < library.length; i++) {
             var book = library[i];
@@ -29,7 +27,7 @@ function fillLibrary() {
             var cn = classlist.shift();
             classlist.push(cn);
         }
-   
+    attachAnimations();      
 }
 /* -----------------------------------------------------------------------------
     ANIMATION 
@@ -208,29 +206,8 @@ function overlayVertPos() { // determines the vertical position for the summary 
             return false;
     }
 }
-/* -----------------------------------------------------------------------------
-    BUILD LIBRARY ARRAY 
-   ---------------------------------------------------------------------------*/
-function Book(param) {
-    this.cover = param.cover;
-    this.title = param.title;
-    this.author = param.author;
-    this.abstract = param.abstract;
-    library.push(this);
-}
-
-// function assembleData() {
-//     var book;
-//     book = new Book('http://i1274.photobucket.com/albums/y436/jabas1/aclockworkorange_zpsab4c6d1f.jpg','A Clockwork Orange','Anthony Burgess','A vicious fifteen-year-old &ldquo;droog&rdquo; is the central character of this 1963 classic, whose stark terror was captured in Stanley Kubrick&rsquo;s magnificent film of the same title. In Anthony Burgess&rsquo;s nightmare vision of the future, where criminals take over after dark, the story is told by the central character, Alex, who talks in a brutal invented slang that brilliantly renders his and his friends&rsquo; social pathology. A Clockwork Orange is a frightening fable about good and evil, and the meaning of human freedom. When the state undertakes to reform Alex&mdash;to &ldquo;redeem&rdquo; him&mdash;the novel asks, &ldquo;At what cost?&rdquo;');
-//     book = new Book('http://i1274.photobucket.com/albums/y436/jabas1/ageneraltheoryoflove_zps474669dd.jpg','A General Theory of Love','Thomas Lewis, M.D., Fari Amini, M.D., Richard Lannon, M.D.','A General Theory of Love draws on the latest scientific research to demonstrate that our nervous systems are not self-contained: from earliest childhood, our brains actually link with those of the people close to us, in a silent rhythm that alters the very structure of our brains, establishes life-long emotional patterns, and makes us, in large part, who we are. Explaining how relationships function, how parents shape their child&rsquo;s developing self, how psychotherapy really works, and how our society dangerously flouts essential emotional laws, this is a work of rare passion and eloquence that will forever change the way you think about human intimacy.');
-// }
-
-//'thumb','title','author','summary'
-
 
 function assembleData() {
-    var book;
-    
     $.ajax({
         method: "GET",
         url: "https://dapi.kakao.com/v3/search/book?target=title",
@@ -242,17 +219,17 @@ function assembleData() {
         },
     })
     .done(function (info) {
-        var cover = info.documents[0].thumbnail;
-        var title = info.documents[0].title;
-        var author = info.documents[0].authors[0];
-        var abstract = info.documents[0].contents;
+        let cover = info.documents[0].thumbnail;
+        let title = info.documents[0].title;
+        let author = info.documents[0].authors[0];
+        let abstract = info.documents[0].contents;
 
-        var param = {
+        let param = {
             "cover" : cover,
             "title" : title,
             "author" : author,
             "abstract" : abstract
         }
-        book = new Book(param)
+        fillLibrary(param);
     });
 }
